@@ -6,6 +6,36 @@
 
 Professional MCP (Model Context Protocol) server for managing n8n workflows programmatically. Enables AI assistants like Claude, GPT, and others to create, manage, and orchestrate n8n workflows seamlessly.
 
+## 🚀 Quick Start
+
+Get up and running in minutes with Docker:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/MrBozkay/n8n-mcp-server.git
+    cd n8n-mcp-server
+    ```
+
+2.  **Build the Docker image:**
+    ```bash
+    docker build -t n8n-mcp-server .
+    ```
+
+3.  **Run the container:**
+    Replace the placeholder values for `N8N_BASE_URL` and `N8N_API_KEY` with your actual n8n credentials.
+    ```bash
+    docker run -d -p 8080:8080 \
+      -e N8N_BASE_URL="https://your-instance.app.n8n.cloud" \
+      -e N8N_API_KEY="your-n8n-api-key" \
+      --name n8n-mcp-container \
+      n8n-mcp-server
+    ```
+
+4.  **Connect your MCP client:**
+    Point your MCP client (e.g., Claude Desktop) to `http://localhost:8080`.
+
+For more detailed instructions, see the [Installation](#-installation) and [Usage](#-usage) sections.
+
 ## 🎯 Project Goals
 
 ### Main Purpose
@@ -60,11 +90,27 @@ Docker, projenin tüm bağımlılıklarıyla birlikte izole bir ortamda çalış
 1.  **Docker imajını oluşturun:**
     Projenin ana dizininde aşağıdaki komutu çalıştırın:
     ```bash
-    docker build -t n8n-mcp-server:latest .
+    docker build -t n8n-mcp-server .
     ```
 
-2.  **AI Assistant ile kullanın:**
-    Aşağıdaki [Using with Claude Desktop](#using-with-claude-desktop) bölümündeki Docker yapılandırmasını kullanın.
+2.  **Konteyneri Çalıştırın:**
+    Aşağıdaki komutu kullanarak konteyneri başlatın. Bu komut, sunucuyu arka planda başlatır ve makinenizin 8080 portunu konteynerin 8080 portuna yönlendirir.
+
+    **Önemli:** Komutu çalıştırmadan önce `-e` ile belirtilen `N8N_BASE_URL` ve `N8N_API_KEY` ortam değişkenlerini kendi n8n bilgilerinizle değiştirmeyi unutmayın.
+
+    ```bash
+    docker run -d -p 8080:8080 \
+      -e N8N_BASE_URL="https://your-instance.app.n8n.cloud" \
+      -e N8N_API_KEY="your-n8n-api-key" \
+      --name n8n-mcp-container \
+      n8n-mcp-server
+    ```
+
+3.  **Logları Kontrol Edin:**
+    Konteynerin durumunu ve loglarını kontrol etmek için aşağıdaki komutu kullanabilirsiniz:
+    ```bash
+    docker logs -f n8n-mcp-container
+    ```
 
 ### Method 2: From Source (For Development)
 
@@ -155,25 +201,47 @@ python -m src.n8n_mcp.server --env
 python -m src.n8n_mcp.server /path/to/config.json
 ```
 
-### Using with Claude Desktop
+### Using with an MCP Client (e.g., Claude Desktop)
+
+You can connect any MCP-compatible client to this server. Here are a couple of common methods:
+
+#### Method 1: Connecting to the Docker Container (Recommended)
+
+Once the Docker container is running, it exposes the MCP server on port `8080`. You can connect your MCP client to it by defining a remote server.
+
+In your MCP client's configuration (e.g., `claude_desktop_config.json`), add a server entry pointing to `http://localhost:8080`:
+
+```json
+{
+  "mcpServers": {
+    "n8n-docker": {
+      "url": "http://localhost:8080"
+    }
+  }
+}
+```
+*Remember to replace `"n8n-docker"` with the name you want to use for the tool provider.*
+
+#### Method 2: Running from Source (For Development)
 
 Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
 ```json
 {
   "mcpServers": {
-    "n8n": {
+    "n8n-local": {
       "command": "python",
       "args": [
         "-m",
         "src.n8n_mcp.server",
-        "/absolute/path/to/n8n-mcp-server/config/config.json"
+        "--env"
       ],
       "cwd": "/absolute/path/to/n8n-mcp-server"
     }
   }
 }
 ```
+*Make sure you have a `.env` file in the project root or have the necessary environment variables exported in your shell.*
 
 ### Example Operations
 
