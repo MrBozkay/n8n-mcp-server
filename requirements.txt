@@ -1,0 +1,19 @@
+# MCP (Model Context Protocol) dependencies
+mcp>=1.0.0
+
+# HTTP client libraries
+httpx>=0.25.0
+
+# Async support
+anyio>=4.0.0
+
+# Configuration management
+pydantic>=2.4.0
+pydantic-settings>=2.0.0
+
+# Logging and monitoring
+structlog>=23.1.0
+colorlog>=6.7.0
+
+# Environment variables
+python-dotenv>=1.0.0

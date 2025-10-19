@@ -1,0 +1,33 @@
+{
+  "n8n": {
+    "base_url": "https://yaskagroup1.app.n8n.cloud",
+    "api_key": "YOUR_N8N_API_KEY_HERE",
+    "timeout": 30,
+    "max_retries": 3
+  },
+  "mcp": {
+    "server_name": "n8n-workflow-manager",
+    "version": "1.0.0",
+    "description": "MCP server for managing n8n workflows",
+    "port": 8080
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/n8n_mcp_server.log",
+    "max_bytes": 10485760,
+    "backup_count": 5
+  },
+  "security": {
+    "enable_authentication": true,
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 100
+    }
+  },
+  "performance": {
+    "cache_ttl": 300,
+    "max_concurrent_requests": 10,
+    "response_timeout": 2
+  }
+}
